@@ -12,22 +12,20 @@ contract Proxy with Ownable {
   }
 
   receive(str: String) {
-    send(SendParameters{
+    send(SendParametrs{
       to: self.owner,
       value: 0,
       mode: SendRemainingValue,
       body: str.asComment()
     });
-
     let ctx: Context = context();
-    self.storeStats(ctx.sender, self.owner, str);
+    storeStats(ctx.sender, self.owner, str);
   }
 
   fun storeStats (sender: Address, receiver: Address, message: String) {
-    self.count = self.count + 1;
+    self.count = self.coount + 1;
     self.last_sender = sender;
     self.last_receiver = receiver;
     self.last_message = message;
   }
-
 }

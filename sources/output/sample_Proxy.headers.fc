@@ -1,0 +1,73 @@
+;;
+;; Header files for Proxy
+;; NOTE: declarations are sorted for optimal order
+;;
+
+;; __tact_verify_address
+slice __tact_verify_address(slice address) inline;
+
+;; __tact_load_address
+(slice, slice) __tact_load_address(slice cs) inline;
+
+;; __tact_load_address_opt
+(slice, slice) __tact_load_address_opt(slice cs) inline;
+
+;; __tact_store_address
+builder __tact_store_address(builder b, slice address) inline;
+
+;; __tact_store_address_opt
+builder __tact_store_address_opt(builder b, slice address) inline;
+
+;; __tact_not_null
+forall X -> X __tact_not_null(X x) inline;
+
+;; __tact_context_get
+(int, slice, int, slice) __tact_context_get() inline;
+
+;; __tact_store_bool
+builder __tact_store_bool(builder b, int v) inline;
+
+;; __tact_string_builder_start
+tuple __tact_string_builder_start(builder b) inline;
+
+;; __tact_string_builder_start_comment
+tuple __tact_string_builder_start_comment() inline;
+
+;; __tact_string_builder_end
+cell __tact_string_builder_end(tuple builders) inline;
+
+;; __tact_string_builder_append
+((tuple), ()) __tact_string_builder_append(tuple builders, slice sc) inline_ref;
+
+;; $Proxy$_store
+builder $Proxy$_store(builder build_0, (slice, int, slice, slice, slice) v) inline;
+
+;; $Proxy$_load
+(slice, ((slice, int, slice, slice, slice))) $Proxy$_load(slice sc_0) inline;
+
+;; $Proxy$init$_load
+(slice, ((slice))) $Proxy$init$_load(slice sc_0) inline;
+
+;; $Proxy$_contract_init
+(slice, int, slice, slice, slice) $Proxy$_contract_init(slice $owner) impure inline_ref;
+
+;; $Proxy$_contract_load
+(slice, int, slice, slice, slice) $Proxy$_contract_load() impure inline_ref;
+
+;; $Proxy$_contract_store
+() $Proxy$_contract_store((slice, int, slice, slice, slice) v) impure inline;
+
+;; $global_send
+() $global_send((int, slice, int, int, cell, cell, cell) $params) impure inline_ref;
+
+;; $String$_fun_asComment
+cell $String$_fun_asComment(slice $self) impure inline_ref;
+
+;; $Proxy$_fun_storeStats
+((slice, int, slice, slice, slice), ()) $Proxy$_fun_storeStats((slice, int, slice, slice, slice) $self, slice $sender, slice $receiver, slice $message) impure inline_ref;
+
+;; $Proxy$_fun_owner
+((slice, int, slice, slice, slice), slice) $Proxy$_fun_owner((slice, int, slice, slice, slice) $self) impure inline_ref;
+
+;; $SendParameters$_constructor_to_value_mode_body
+((int, slice, int, int, cell, cell, cell)) $SendParameters$_constructor_to_value_mode_body(slice to, int value, int mode, cell body) inline;
