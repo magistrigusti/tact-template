@@ -1,9 +1,9 @@
 # TACT Compilation Report
 Contract: Proxy
-BOC Size: 1083 bytes
+BOC Size: 1429 bytes
 
 # Types
-Total Types: 5
+Total Types: 7
 
 ## StateInit
 TLB: `_ code:^cell data:^cell = StateInit`
@@ -24,6 +24,14 @@ Signature: `ChangeOwner{queryId:uint64,newOwner:address}`
 ## ChangeOwnerOk
 TLB: `change_owner_ok#327b2b4a queryId:uint64 newOwner:address = ChangeOwnerOk`
 Signature: `ChangeOwnerOk{queryId:uint64,newOwner:address}`
+
+## ProxyMessage
+TLB: `proxy_message#8da0f2c7 str:^string to:address = ProxyMessage`
+Signature: `ProxyMessage{str:^string,to:address}`
+
+## ChangeExampleOwner
+TLB: `change_example_owner#ff5f0a11 address:address = ChangeExampleOwner`
+Signature: `ChangeExampleOwner{address:address}`
 
 # Get Methods
 Total Get Methods: 1
@@ -55,3 +63,4 @@ Total Get Methods: 1
 135: Code of a contract was not found
 136: Invalid address
 137: Masterchain support is not enabled for this contract
+4429: Invalid sender

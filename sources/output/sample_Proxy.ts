@@ -284,6 +284,95 @@ function dictValueParserChangeOwnerOk(): DictionaryValue<ChangeOwnerOk> {
     }
 }
 
+export type ProxyMessage = {
+    $$type: 'ProxyMessage';
+    str: string;
+    to: Address;
+}
+
+export function storeProxyMessage(src: ProxyMessage) {
+    return (builder: Builder) => {
+        let b_0 = builder;
+        b_0.storeUint(2376135367, 32);
+        b_0.storeStringRefTail(src.str);
+        b_0.storeAddress(src.to);
+    };
+}
+
+export function loadProxyMessage(slice: Slice) {
+    let sc_0 = slice;
+    if (sc_0.loadUint(32) !== 2376135367) { throw Error('Invalid prefix'); }
+    let _str = sc_0.loadStringRefTail();
+    let _to = sc_0.loadAddress();
+    return { $$type: 'ProxyMessage' as const, str: _str, to: _to };
+}
+
+function loadTupleProxyMessage(source: TupleReader) {
+    let _str = source.readString();
+    let _to = source.readAddress();
+    return { $$type: 'ProxyMessage' as const, str: _str, to: _to };
+}
+
+function storeTupleProxyMessage(source: ProxyMessage) {
+    let builder = new TupleBuilder();
+    builder.writeString(source.str);
+    builder.writeAddress(source.to);
+    return builder.build();
+}
+
+function dictValueParserProxyMessage(): DictionaryValue<ProxyMessage> {
+    return {
+        serialize: (src, buidler) => {
+            buidler.storeRef(beginCell().store(storeProxyMessage(src)).endCell());
+        },
+        parse: (src) => {
+            return loadProxyMessage(src.loadRef().beginParse());
+        }
+    }
+}
+
+export type ChangeExampleOwner = {
+    $$type: 'ChangeExampleOwner';
+    address: Address;
+}
+
+export function storeChangeExampleOwner(src: ChangeExampleOwner) {
+    return (builder: Builder) => {
+        let b_0 = builder;
+        b_0.storeUint(4284418577, 32);
+        b_0.storeAddress(src.address);
+    };
+}
+
+export function loadChangeExampleOwner(slice: Slice) {
+    let sc_0 = slice;
+    if (sc_0.loadUint(32) !== 4284418577) { throw Error('Invalid prefix'); }
+    let _address = sc_0.loadAddress();
+    return { $$type: 'ChangeExampleOwner' as const, address: _address };
+}
+
+function loadTupleChangeExampleOwner(source: TupleReader) {
+    let _address = source.readAddress();
+    return { $$type: 'ChangeExampleOwner' as const, address: _address };
+}
+
+function storeTupleChangeExampleOwner(source: ChangeExampleOwner) {
+    let builder = new TupleBuilder();
+    builder.writeAddress(source.address);
+    return builder.build();
+}
+
+function dictValueParserChangeExampleOwner(): DictionaryValue<ChangeExampleOwner> {
+    return {
+        serialize: (src, buidler) => {
+            buidler.storeRef(beginCell().store(storeChangeExampleOwner(src)).endCell());
+        },
+        parse: (src) => {
+            return loadChangeExampleOwner(src.loadRef().beginParse());
+        }
+    }
+}
+
  type Proxy_init_args = {
     $$type: 'Proxy_init_args';
     owner: Address;
@@ -297,8 +386,8 @@ function initProxy_init_args(src: Proxy_init_args) {
 }
 
 async function Proxy_init(owner: Address) {
-    const __code = Cell.fromBase64('te6ccgECFwEABC8AART/APSkE/S88sgLAQIBYgIDA5rQAdDTAwFxsKMB+kABINdJgQELuvLgiCDXCwoggQT/uvLQiYMJuvLgiFRQUwNvBPhhAvhi2zxVFNs88uCCyPhDAcx/AcoAVUDbPMntVA4EBQIBIAwNA5Ttou37AZIwf+BwIddJwh+VMCDXCx/ewACPrCDXScIfj6OAINchcIBAIts8KFUgf1UwbW3bPPhBbyQQI18DUmLbPH/bMeAwkTDicAYHCAHOUFQg10mBAQu68uCIINcLCiCBBP+68tCJgwm68uCIzxYSgQEBzwAhbrObfwHKAMhYzxbJAcyUcDLKAOJYIG6VMHABywGOHiDXSYEBC7ry4Igg1wsKIIEE/7ry0ImDCbry4IjPFuLIWAsBQshwAcsfbwABb4xtb4wB2zxvIgHJkyFus5YBbyJZzMnoMQkByshxAcoBUAcBygBwAcoCUAUg10mBAQu68uCIINcLCiCBBP+68tCJgwm68uCIzxZQA/oCcAHKaCNus5F/kyRus+KXMzMBcAHKAOMNIW6znH8BygABIG7y0IABzJUxcAHKAOLJAfsACgAMbDMDpFUgALog10oh10mXIMIAIsIAsY5KA28igH8izzGrAqEFqwJRVbYIIMIAnCCqAhXXGFAzzxZAFN5ZbwJTQaHCAJnIAW8CUEShqgKOEjEzwgCZ1DDQINdKIddJknAg4uLoXwMAmH8BygDIcAHKAHABygAkbrOdfwHKAAQgbvLQgFAEzJY0A3ABygDiJG6znX8BygAEIG7y0IBQBMyWNANwAcoA4nABygACfwHKAALJWMwAWCBulTBwAcsBjh4g10mBAQu68uCIINcLCiCBBP+68tCJgwm68uCIzxbiyQHMAhG+KO7Z5tnjYowODwIBIBMUAn7tRNDUAfhj0gABjoTbPGwV4Pgo1wsKgwm68uCJ+kABINdJgQELuvLgiCDXCwoggQT/uvLQiYMJuvLgiAHR2zwQEQACJAG++kABINdJgQELuvLgiCDXCwoggQT/uvLQiYMJuvLgiAGBAQHXANIAAZPUAdCRbeIB+kAh1wsBwwCOHQEg10mBAQu68uCIINcLCiCBBP+68tCJgwm68uCIkjFt4gHUAdASAAhwbW1tAGD6QCHXCwHDAI4dASDXSYEBC7ry4Igg1wsKIIEE/7ry0ImDCbry4IiSMW3iMRUUQzAAubu9GCcFzsPV0srnsehOw51kqFG2aCcJ3WNS0rZHyzItOvLf3xYjmCcCBVwBuAZ2OUzlg6rkclssOCcJ2XTlqzTstzOg6WbZRm6KSCcEDOdWnnFfnSULAdYW4mR7KAIBSBUWABGwr7tRNDSAAGAAdbJu40NWlwZnM6Ly9RbWRaZTViNXNQSlBQbUpwazlFcHduVXF0dXhzQ05kVW5ZckRSbWdrbnd2Vlpwgg');
-    const __system = Cell.fromBase64('te6cckECGQEABDkAAQHAAQEFoMZ3AgEU/wD0pBP0vPLICwMCAWIMBAIBIAoFAgEgCQYCAUgIBwB1sm7jQ1aXBmczovL1FtZFplNWI1c1BKUFBtSnBrOUVwd25VcXR1eHNDTmRVbllyRFJtZ2tud3ZWWnCCAAEbCvu1E0NIAAYAC5u70YJwXOw9XSyuex6E7DnWSoUbZoJwndY1LStkfLMi068t/fFiOYJwIFXAG4BnY5TOWDquRyWyw4JwnZdOWrNOy3M6DpZtlGbopIJwQM51aecV+dJQsB1hbiZHsoAhG+KO7Z5tnjYowVCwACJAOa0AHQ0wMBcbCjAfpAASDXSYEBC7ry4Igg1wsKIIEE/7ry0ImDCbry4IhUUFMDbwT4YQL4Yts8VRTbPPLggsj4QwHMfwHKAFVA2zzJ7VQVDw0BzlBUINdJgQELuvLgiCDXCwoggQT/uvLQiYMJuvLgiM8WEoEBAc8AIW6zm38BygDIWM8WyQHMlHAyygDiWCBulTBwAcsBjh4g10mBAQu68uCIINcLCiCBBP+68tCJgwm68uCIzxbiyFgOAFggbpUwcAHLAY4eINdJgQELuvLgiCDXCwoggQT/uvLQiYMJuvLgiM8W4skBzAOU7aLt+wGSMH/gcCHXScIflTAg1wsf3sAAj6wg10nCH4+jgCDXIXCAQCLbPChVIH9VMG1t2zz4QW8kECNfA1Ji2zx/2zHgMJEw4nATERAADGwzA6RVIAHKyHEBygFQBwHKAHABygJQBSDXSYEBC7ry4Igg1wsKIIEE/7ry0ImDCbry4IjPFlAD+gJwAcpoI26zkX+TJG6z4pczMwFwAcoA4w0hbrOcfwHKAAEgbvLQgAHMlTFwAcoA4skB+wASAJh/AcoAyHABygBwAcoAJG6znX8BygAEIG7y0IBQBMyWNANwAcoA4iRus51/AcoABCBu8tCAUATMljQDcAHKAOJwAcoAAn8BygACyVjMAULIcAHLH28AAW+MbW+MAds8byIByZMhbrOWAW8iWczJ6DEUALog10oh10mXIMIAIsIAsY5KA28igH8izzGrAqEFqwJRVbYIIMIAnCCqAhXXGFAzzxZAFN5ZbwJTQaHCAJnIAW8CUEShqgKOEjEzwgCZ1DDQINdKIddJknAg4uLoXwMCfu1E0NQB+GPSAAGOhNs8bBXg+CjXCwqDCbry4In6QAEg10mBAQu68uCIINcLCiCBBP+68tCJgwm68uCIAdHbPBcWAAhwbW1tAb76QAEg10mBAQu68uCIINcLCiCBBP+68tCJgwm68uCIAYEBAdcA0gABk9QB0JFt4gH6QCHXCwHDAI4dASDXSYEBC7ry4Igg1wsKIIEE/7ry0ImDCbry4IiSMW3iAdQB0BgAYPpAIdcLAcMAjh0BINdJgQELuvLgiCDXCwoggQT/uvLQiYMJuvLgiJIxbeIxFRRDMBE6OCI=');
+    const __code = Cell.fromBase64('te6ccgECHAEABYkAART/APSkE/S88sgLAQIBYgIDA5rQAdDTAwFxsKMB+kABINdJgQELuvLgiCDXCwoggQT/uvLQiYMJuvLgiFRQUwNvBPhhAvhi2zxVFNs88uCCyPhDAcx/AcoAVUDbPMntVBMEBQIBIBESBPLtou37AZIwf+BwIddJwh+VMCDXCx/eIIIQjaDyx7qP0DDTHwGCEI2g8se68uCB1AHQAfpAASDXSYEBC7ry4Igg1wsKIIEE/7ry0ImDCbry4IgSbBJwgEAj2zwjVSB/VTBtbds8+EFvJBAjXwMC2zx/4CCCEP9fChG6CwwNBgHOUFQg10mBAQu68uCIINcLCiCBBP+68tCJgwm68uCIzxYSgQEBzwAhbrObfwHKAMhYzxbJAcyUcDLKAOJYIG6VMHABywGOHiDXSYEBC7ry4Igg1wsKIIEE/7ry0ImDCbry4IjPFuLIWBACfo61MNMfAYIQ/18KEbry4IH6QAEg10mBAQu68uCIINcLCiCBBP+68tCJgwm68uCIMVVA2zxsFH/gwACRMOMNcAgHBNwg+QEggvBWHbkZHNoZIvr2Bm7STtxoFms5ML/rWbp/yERxLniPdbqPoVvbPCAgbvLQgHCAQCUgbvLQgNs8f1UwbW3bPAOkA3/bMeCC8G70GhYDJ5y9AzltOjWT0/RlyWhVQSWos5Bn6/yLBg1luggLDAkAEvhCUlDHBfLghAN2jzAw+EFvJBAjXwMlgRFNAscF8vQgIG7y0IBwgEAlIG7y0IDbPH9VMG1t2zwDpAN/2zHgINdJwh/jAjALDAoDRoAg1yFwgEAi2zwoVSB/VTBtbds8+EFvJBAjXwNSYts8f9sxCwwNAULIcAHLH28AAW+MbW+MAds8byIByZMhbrOWAW8iWczJ6DEOAcrIcQHKAVAHAcoAcAHKAlAFINdJgQELuvLgiCDXCwoggQT/uvLQiYMJuvLgiM8WUAP6AnABymgjbrORf5MkbrPilzMzAXABygDjDSFus5x/AcoAASBu8tCAAcyVMXABygDiyQH7AA8ADGwzA6RVIAC6INdKIddJlyDCACLCALGOSgNvIoB/Is8xqwKhBasCUVW2CCDCAJwgqgIV1xhQM88WQBTeWW8CU0GhwgCZyAFvAlBEoaoCjhIxM8IAmdQw0CDXSiHXSZJwIOLi6F8DAJh/AcoAyHABygBwAcoAJG6znX8BygAEIG7y0IBQBMyWNANwAcoA4iRus51/AcoABCBu8tCAUATMljQDcAHKAOJwAcoAAn8BygACyVjMAFggbpUwcAHLAY4eINdJgQELuvLgiCDXCwoggQT/uvLQiYMJuvLgiM8W4skBzAIRviju2ebZ42KMExQCASAYGQJ+7UTQ1AH4Y9IAAY6E2zxsFeD4KNcLCoMJuvLgifpAASDXSYEBC7ry4Igg1wsKIIEE/7ry0ImDCbry4IgB0ds8FRYAAiQBvvpAASDXSYEBC7ry4Igg1wsKIIEE/7ry0ImDCbry4IgBgQEB1wDSAAGT1AHQkW3iAfpAIdcLAcMAjh0BINdJgQELuvLgiCDXCwoggQT/uvLQiYMJuvLgiJIxbeIB1AHQFwAIcG1tbQBg+kAh1wsBwwCOHQEg10mBAQu68uCIINcLCiCBBP+68tCJgwm68uCIkjFt4jEVFEMwALm7vRgnBc7D1dLK57HoTsOdZKhRtmgnCd1jUtK2R8syLTry398WI5gnAgVcAbgGdjlM5YOq5HJbLDgnCdl05as07LczoOlm2UZuikgnBAznVp5xX50lCwHWFuJkeygCAUgaGwARsK+7UTQ0gABgAHWybuNDVpcGZzOi8vUW1OdFpXaXo4S3lhNVlITERpZ2tkWXlFcHloY0pxaUFnYk1zQ0RaQUM2cTdWVYIA==');
+    const __system = Cell.fromBase64('te6cckECHgEABZMAAQHAAQEFoMZ3AgEU/wD0pBP0vPLICwMCAWIMBAIBIAoFAgEgCQYCAUgIBwB1sm7jQ1aXBmczovL1FtTnRaV2l6OEt5YTVZSExEaWdrZFl5RXB5aGNKcWlBZ2JNc0NEWkFDNnE3VlWCAAEbCvu1E0NIAAYAC5u70YJwXOw9XSyuex6E7DnWSoUbZoJwndY1LStkfLMi068t/fFiOYJwIFXAG4BnY5TOWDquRyWyw4JwnZdOWrNOy3M6DpZtlGbopIJwQM51aecV+dJQsB1hbiZHsoAhG+KO7Z5tnjYowaCwACJAOa0AHQ0wMBcbCjAfpAASDXSYEBC7ry4Igg1wsKIIEE/7ry0ImDCbry4IhUUFMDbwT4YQL4Yts8VRTbPPLggsj4QwHMfwHKAFVA2zzJ7VQaDw0BzlBUINdJgQELuvLgiCDXCwoggQT/uvLQiYMJuvLgiM8WEoEBAc8AIW6zm38BygDIWM8WyQHMlHAyygDiWCBulTBwAcsBjh4g10mBAQu68uCIINcLCiCBBP+68tCJgwm68uCIzxbiyFgOAFggbpUwcAHLAY4eINdJgQELuvLgiCDXCwoggQT/uvLQiYMJuvLgiM8W4skBzATy7aLt+wGSMH/gcCHXScIflTAg1wsf3iCCEI2g8se6j9Aw0x8BghCNoPLHuvLggdQB0AH6QAEg10mBAQu68uCIINcLCiCBBP+68tCJgwm68uCIEmwScIBAI9s8I1Ugf1UwbW3bPPhBbyQQI18DAts8f+AgghD/XwoRuhgWFRACfo61MNMfAYIQ/18KEbry4IH6QAEg10mBAQu68uCIINcLCiCBBP+68tCJgwm68uCIMVVA2zxsFH/gwACRMOMNcBQRBNwg+QEggvBWHbkZHNoZIvr2Bm7STtxoFms5ML/rWbp/yERxLniPdbqPoVvbPCAgbvLQgHCAQCUgbvLQgNs8f1UwbW3bPAOkA3/bMeCC8G70GhYDJ5y9AzltOjWT0/RlyWhVQSWos5Bn6/yLBg1luhQYFhIDdo8wMPhBbyQQI18DJYERTQLHBfL0ICBu8tCAcIBAJSBu8tCA2zx/VTBtbds8A6QDf9sx4CDXScIf4wIwGBYTA0aAINchcIBAIts8KFUgf1UwbW3bPPhBbyQQI18DUmLbPH/bMRgWFQAS+EJSUMcF8uCEAAxsMwOkVSAByshxAcoBUAcBygBwAcoCUAUg10mBAQu68uCIINcLCiCBBP+68tCJgwm68uCIzxZQA/oCcAHKaCNus5F/kyRus+KXMzMBcAHKAOMNIW6znH8BygABIG7y0IABzJUxcAHKAOLJAfsAFwCYfwHKAMhwAcoAcAHKACRus51/AcoABCBu8tCAUATMljQDcAHKAOIkbrOdfwHKAAQgbvLQgFAEzJY0A3ABygDicAHKAAJ/AcoAAslYzAFCyHAByx9vAAFvjG1vjAHbPG8iAcmTIW6zlgFvIlnMyegxGQC6INdKIddJlyDCACLCALGOSgNvIoB/Is8xqwKhBasCUVW2CCDCAJwgqgIV1xhQM88WQBTeWW8CU0GhwgCZyAFvAlBEoaoCjhIxM8IAmdQw0CDXSiHXSZJwIOLi6F8DAn7tRNDUAfhj0gABjoTbPGwV4Pgo1wsKgwm68uCJ+kABINdJgQELuvLgiCDXCwoggQT/uvLQiYMJuvLgiAHR2zwcGwAIcG1tbQG++kABINdJgQELuvLgiCDXCwoggQT/uvLQiYMJuvLgiAGBAQHXANIAAZPUAdCRbeIB+kAh1wsBwwCOHQEg10mBAQu68uCIINcLCiCBBP+68tCJgwm68uCIkjFt4gHUAdAdAGD6QCHXCwHDAI4dASDXSYEBC7ry4Igg1wsKIIEE/7ry0ImDCbry4IiSMW3iMRUUQzDAAxAu');
     let builder = beginCell();
     builder.storeRef(__system);
     builder.storeUint(0, 1);
@@ -332,6 +421,7 @@ const Proxy_errors: { [key: number]: { message: string } } = {
     135: { message: `Code of a contract was not found` },
     136: { message: `Invalid address` },
     137: { message: `Masterchain support is not enabled for this contract` },
+    4429: { message: `Invalid sender` },
 }
 
 const Proxy_types: ABIType[] = [
@@ -340,6 +430,8 @@ const Proxy_types: ABIType[] = [
     {"name":"SendParameters","header":null,"fields":[{"name":"bounce","type":{"kind":"simple","type":"bool","optional":false}},{"name":"to","type":{"kind":"simple","type":"address","optional":false}},{"name":"value","type":{"kind":"simple","type":"int","optional":false,"format":257}},{"name":"mode","type":{"kind":"simple","type":"int","optional":false,"format":257}},{"name":"body","type":{"kind":"simple","type":"cell","optional":true}},{"name":"code","type":{"kind":"simple","type":"cell","optional":true}},{"name":"data","type":{"kind":"simple","type":"cell","optional":true}}]},
     {"name":"ChangeOwner","header":2174598809,"fields":[{"name":"queryId","type":{"kind":"simple","type":"uint","optional":false,"format":64}},{"name":"newOwner","type":{"kind":"simple","type":"address","optional":false}}]},
     {"name":"ChangeOwnerOk","header":846932810,"fields":[{"name":"queryId","type":{"kind":"simple","type":"uint","optional":false,"format":64}},{"name":"newOwner","type":{"kind":"simple","type":"address","optional":false}}]},
+    {"name":"ProxyMessage","header":2376135367,"fields":[{"name":"str","type":{"kind":"simple","type":"string","optional":false}},{"name":"to","type":{"kind":"simple","type":"address","optional":false}}]},
+    {"name":"ChangeExampleOwner","header":4284418577,"fields":[{"name":"address","type":{"kind":"simple","type":"address","optional":false}}]},
 ]
 
 const Proxy_getters: ABIGetter[] = [
@@ -347,7 +439,11 @@ const Proxy_getters: ABIGetter[] = [
 ]
 
 const Proxy_receivers: ABIReceiver[] = [
+    {"receiver":"internal","message":{"kind":"text","text":"Repeat"}},
+    {"receiver":"internal","message":{"kind":"text","text":"Return"}},
     {"receiver":"internal","message":{"kind":"text"}},
+    {"receiver":"internal","message":{"kind":"typed","type":"ProxyMessage"}},
+    {"receiver":"internal","message":{"kind":"typed","type":"ChangeExampleOwner"}},
 ]
 
 export class Proxy implements Contract {
@@ -380,11 +476,23 @@ export class Proxy implements Contract {
         this.init = init;
     }
     
-    async send(provider: ContractProvider, via: Sender, args: { value: bigint, bounce?: boolean| null | undefined }, message: string) {
+    async send(provider: ContractProvider, via: Sender, args: { value: bigint, bounce?: boolean| null | undefined }, message: 'Repeat' | 'Return' | string | ProxyMessage | ChangeExampleOwner) {
         
         let body: Cell | null = null;
+        if (message === 'Repeat') {
+            body = beginCell().storeUint(0, 32).storeStringTail(message).endCell();
+        }
+        if (message === 'Return') {
+            body = beginCell().storeUint(0, 32).storeStringTail(message).endCell();
+        }
         if (typeof message === 'string') {
             body = beginCell().storeUint(0, 32).storeStringTail(message).endCell();
+        }
+        if (message && typeof message === 'object' && !(message instanceof Slice) && message.$$type === 'ProxyMessage') {
+            body = beginCell().store(storeProxyMessage(message)).endCell();
+        }
+        if (message && typeof message === 'object' && !(message instanceof Slice) && message.$$type === 'ChangeExampleOwner') {
+            body = beginCell().store(storeChangeExampleOwner(message)).endCell();
         }
         if (body === null) { throw new Error('Invalid message type'); }
         

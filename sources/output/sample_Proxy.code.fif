@@ -8,11 +8,15 @@ PROGRAM{
   DECLPROC __tact_store_address_opt
   DECLPROC __tact_not_null
   DECLPROC __tact_context_get
+  DECLPROC __tact_context_get_sender
   DECLPROC __tact_store_bool
+  DECLPROC __tact_slice_eq_bits
   DECLPROC __tact_string_builder_start
   DECLPROC __tact_string_builder_start_comment
   DECLPROC __tact_string_builder_end
   DECLPROC __tact_string_builder_append
+  DECLPROC $ProxyMessage$_load
+  DECLPROC $ChangeExampleOwner$_load
   DECLPROC $Proxy$_store
   DECLPROC $Proxy$_load
   DECLPROC $Proxy$init$_load
@@ -22,9 +26,14 @@ PROGRAM{
   DECLPROC $global_send
   DECLPROC $String$_fun_asComment
   DECLPROC $Proxy$_fun_storeStats
+  DECLPROC $Proxy$_fun_requireOwner
   DECLPROC $Proxy$_fun_owner
   DECLPROC $SendParameters$_constructor_to_value_mode_body
+  DECLPROC $Proxy$_internal_text_561db9191cda1922faf6066ed24edc68166b3930bfeb59ba7fc844712e788f75
+  DECLPROC $Proxy$_internal_text_6ef41a1603279cbd03396d3a3593d3f465c968554125a8b39067ebfc8b060d65
   DECLPROC $Proxy$_internal_any_text
+  DECLPROC $Proxy$_internal_binary_ProxyMessage
+  DECLPROC $Proxy$_internal_binary_ChangeExampleOwner
   83229 DECLMETHOD %owner
   113617 DECLMETHOD supported_interfaces
   121275 DECLMETHOD get_abi_ipfs
@@ -94,9 +103,15 @@ PROGRAM{
     __tact_context GETGLOB
     4 UNTUPLE
   }>
+  __tact_context_get_sender PROCINLINE:<{
+    __tact_context_sender GETGLOB
+  }>
   __tact_store_bool PROCINLINE:<{
     SWAP
     1 STI
+  }>
+  __tact_slice_eq_bits PROCINLINE:<{
+    SDEQ
   }>
   __tact_string_builder_start PROCINLINE:<{
     NIL
@@ -194,6 +209,27 @@ PROGRAM{
       }>
     }>
     3 BLKDROP
+  }>
+  $ProxyMessage$_load PROCINLINE:<{
+    32 LDU
+    SWAP
+    2376135367 PUSHINT
+    EQUAL
+    129 THROWIFNOT
+    LDREF
+    SWAP
+    CTOS
+    SWAP
+    __tact_load_address INLINECALLDICT
+    s1 s2 XCHG
+  }>
+  $ChangeExampleOwner$_load PROCINLINE:<{
+    32 LDU
+    SWAP
+    4284418577 PUSHINT
+    EQUAL
+    129 THROWIFNOT
+    __tact_load_address INLINECALLDICT
   }>
   $Proxy$_store PROCINLINE:<{
     s5 s4 XCHG2
@@ -412,6 +448,12 @@ PROGRAM{
     INC
     3 -ROLL
   }>
+  $Proxy$_fun_requireOwner PROCREF:<{
+    __tact_context_get_sender INLINECALLDICT
+    s5 s(-1) PUXC
+    __tact_slice_eq_bits INLINECALLDICT
+    132 THROWIFNOT
+  }>
   $Proxy$_fun_owner PROCREF:<{
     s4 PUSH
   }>
@@ -420,6 +462,43 @@ PROGRAM{
     4 -ROLL
     PUSHNULL
     PUSHNULL
+  }>
+  $Proxy$_internal_text_561db9191cda1922faf6066ed24edc68166b3930bfeb59ba7fc844712e788f75 PROCINLINE:<{
+    $Proxy$_fun_requireOwner INLINECALLDICT
+    DUP
+    __tact_not_null INLINECALLDICT
+    0 PUSHINT
+    64 PUSHINT
+    s5 PUSH
+    __tact_not_null INLINECALLDICT
+    $String$_fun_asComment INLINECALLDICT
+    $SendParameters$_constructor_to_value_mode_body INLINECALLDICT
+    $global_send INLINECALLDICT
+    s0 s3 XCHG
+    INC
+    s0 s3 XCHG
+  }>
+  $Proxy$_internal_text_6ef41a1603279cbd03396d3a3593d3f465c968554125a8b39067ebfc8b060d65 PROCINLINE:<{
+    __tact_context_get INLINECALLDICT
+    s2 s3 XCHG
+    3 BLKDROP
+    s5 PUSH
+    4429 PUSHINT
+    s0 s2 XCHG
+    __tact_slice_eq_bits INLINECALLDICT
+    THROWANYIFNOT
+    DUP
+    __tact_not_null INLINECALLDICT
+    0 PUSHINT
+    64 PUSHINT
+    s5 PUSH
+    __tact_not_null INLINECALLDICT
+    $String$_fun_asComment INLINECALLDICT
+    $SendParameters$_constructor_to_value_mode_body INLINECALLDICT
+    $global_send INLINECALLDICT
+    s0 s3 XCHG
+    INC
+    s0 s3 XCHG
   }>
   $Proxy$_internal_any_text PROCINLINE:<{
     0 PUSHINT
@@ -436,6 +515,26 @@ PROGRAM{
     s6 s1 PUXC
     $Proxy$_fun_storeStats INLINECALLDICT
   }>
+  $Proxy$_internal_binary_ProxyMessage PROCINLINE:<{
+    0 PUSHINT
+    64 PUSHINT
+    s3 PUSH
+    $String$_fun_asComment INLINECALLDICT
+    s3 PUSH
+    3 -ROLL
+    $SendParameters$_constructor_to_value_mode_body INLINECALLDICT
+    $global_send INLINECALLDICT
+    __tact_context_get INLINECALLDICT
+    s2 s3 XCHG
+    3 BLKDROP
+    s0 s2 XCHG
+    $Proxy$_fun_storeStats INLINECALLDICT
+  }>
+  $Proxy$_internal_binary_ChangeExampleOwner PROCINLINE:<{
+    5 -ROLL
+    $Proxy$_fun_requireOwner INLINECALLDICT
+    1 4 BLKDROP2
+  }>
   %owner PROC:<{
     $Proxy$_contract_load INLINECALLDICT
     $Proxy$_fun_owner INLINECALLDICT
@@ -449,7 +548,7 @@ PROGRAM{
     86142586315491086060343270784266291122 PUSHINT
   }>
   get_abi_ipfs PROC:<{
-    x{697066733a2f2f516d645a6535623573504a50506d4a706b394570776e557174757873434e64556e597244526d676b6e7776565a70} PUSHSLICE
+    x{697066733a2f2f516d4e745a57697a384b79613559484c4469676b64597945707968634a71694167624d7343445a41433671375655} PUSHSLICE
   }>
   lazy_deployment_completed PROC:<{
     c4 PUSH
@@ -474,8 +573,47 @@ PROGRAM{
       DUP
       32 PLDU
     }>
+    DUP
+    2376135367 PUSHINT
+    EQUAL
+    IFJMP:<{
+      DROP
+      $ProxyMessage$_load INLINECALLDICT
+      1 2 BLKDROP2
+      $Proxy$_internal_binary_ProxyMessage INLINECALLDICT
+      TRUE
+    }>
+    DUP
+    4284418577 PUSHINT
+    EQUAL
+    IFJMP:<{
+      DROP
+      $ChangeExampleOwner$_load INLINECALLDICT
+      NIP
+      $Proxy$_internal_binary_ChangeExampleOwner INLINECALLDICT
+      TRUE
+    }>
     0 EQINT
     IF:<{
+      DUP
+      HASHSU
+      DUP
+      38951421043150770036850182824367432463095063073053421585016242166288986181493 PUSHINT
+      EQUAL
+      IFJMP:<{
+        2DROP
+        $Proxy$_internal_text_561db9191cda1922faf6066ed24edc68166b3930bfeb59ba7fc844712e788f75 INLINECALLDICT
+        TRUE
+        RETALT
+      }>
+      50185704066821304142682276875139576209509918329598664458701090545002059533669 PUSHINT
+      EQUAL
+      IFJMP:<{
+        DROP
+        $Proxy$_internal_text_6ef41a1603279cbd03396d3a3593d3f465c968554125a8b39067ebfc8b060d65 INLINECALLDICT
+        TRUE
+        RETALT
+      }>
       DUP
       SBITS
       31 GTINT

@@ -8,6 +8,31 @@
 }
 
 ;;
+;; Type: ProxyMessage
+;; Header: 0x8da0f2c7
+;; TLB: proxy_message#8da0f2c7 str:^string to:address = ProxyMessage
+;;
+
+(slice, ((slice, slice))) $ProxyMessage$_load(slice sc_0) inline {
+    throw_unless(129, sc_0~load_uint(32) == 2376135367);
+    var v'str = sc_0~load_ref().begin_parse();
+    var v'to = sc_0~__tact_load_address();
+    return (sc_0, (v'str, v'to));
+}
+
+;;
+;; Type: ChangeExampleOwner
+;; Header: 0xff5f0a11
+;; TLB: change_example_owner#ff5f0a11 address:address = ChangeExampleOwner
+;;
+
+(slice, ((slice))) $ChangeExampleOwner$_load(slice sc_0) inline {
+    throw_unless(129, sc_0~load_uint(32) == 4284418577);
+    var v'address = sc_0~__tact_load_address();
+    return (sc_0, (v'address));
+}
+
+;;
 ;; Type: Proxy
 ;;
 

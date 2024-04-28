@@ -24,8 +24,14 @@ forall X -> X __tact_not_null(X x) inline;
 ;; __tact_context_get
 (int, slice, int, slice) __tact_context_get() inline;
 
+;; __tact_context_get_sender
+slice __tact_context_get_sender() inline;
+
 ;; __tact_store_bool
 builder __tact_store_bool(builder b, int v) inline;
+
+;; __tact_slice_eq_bits
+int __tact_slice_eq_bits(slice a, slice b) inline;
 
 ;; __tact_string_builder_start
 tuple __tact_string_builder_start(builder b) inline;
@@ -38,6 +44,12 @@ cell __tact_string_builder_end(tuple builders) inline;
 
 ;; __tact_string_builder_append
 ((tuple), ()) __tact_string_builder_append(tuple builders, slice sc) inline_ref;
+
+;; $ProxyMessage$_load
+(slice, ((slice, slice))) $ProxyMessage$_load(slice sc_0) inline;
+
+;; $ChangeExampleOwner$_load
+(slice, ((slice))) $ChangeExampleOwner$_load(slice sc_0) inline;
 
 ;; $Proxy$_store
 builder $Proxy$_store(builder build_0, (slice, int, slice, slice, slice) v) inline;
@@ -65,6 +77,9 @@ cell $String$_fun_asComment(slice $self) impure inline_ref;
 
 ;; $Proxy$_fun_storeStats
 ((slice, int, slice, slice, slice), ()) $Proxy$_fun_storeStats((slice, int, slice, slice, slice) $self, slice $sender, slice $receiver, slice $message) impure inline_ref;
+
+;; $Proxy$_fun_requireOwner
+((slice, int, slice, slice, slice), ()) $Proxy$_fun_requireOwner((slice, int, slice, slice, slice) $self) impure inline_ref;
 
 ;; $Proxy$_fun_owner
 ((slice, int, slice, slice, slice), slice) $Proxy$_fun_owner((slice, int, slice, slice, slice) $self) impure inline_ref;

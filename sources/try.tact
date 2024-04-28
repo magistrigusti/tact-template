@@ -1,5 +1,14 @@
 import "@stdlib/ownable";
 
+message ProxyMessage {
+  str: String;
+  to: Address;
+}
+
+message ChangeExampleOwner {
+  address: Address;
+}
+
 contract Proxy with Ownable {
   owner: Address;
   count: Int = 0;
@@ -11,19 +20,62 @@ contract Proxy with Ownable {
     self.owner = owner;
   }
 
+  receive("Repeat") {
+    self.requireOwner();
+    send(sendParameters{
+      to: self.last_reseiver!!,
+      value: 0,
+      mode:SendRemainingValue,
+      body: (self.last_message!!).asComment()
+    });
+
+    self.count = self.count + 1;
+  }
+
+  receive("Return") {
+    let ctx: Context = context();
+    require(ctx.sender == self.owner, "Invalid sender");
+    send(SendParamets{
+      to: self.last_receiver!!,
+      value: 0,
+      mode: SendRemainingValue,
+      body: (self.last_message!!).asComment()
+    });
+
+    self.count = self.count + 1;
+  }
+
   receive(str: String) {
-    send(SendParametrs{
+    send(SendParameters{
       to: self.owner,
       value: 0,
       mode: SendRemainingValue,
       body: str.asComment()
     });
+
     let ctx: Context = context();
-    storeStats(ctx.sender, self.owner, str);
+    self.storeStats(ctx.sender, self.owner, str);
+  }
+
+  receive(msg: ProxyMessage) {
+    send(SendParameters{
+      to: msg.to,
+      value: 0,
+      mode: SendRemainingValue,
+      body: msg.str.asComment()
+    });
+
+    let ctx:Context = context();
+    self.storeStats(stx.sender, msg.to, msg.str);
+  }
+
+  receive(msg: ChangeExampleOwner) {
+    self.requireOwner();
+    self.owner = msg.address;
   }
 
   fun storeStats (sender: Address, receiver: Address, message: String) {
-    self.count = self.coount + 1;
+    self.count = self.count + 1;
     self.last_sender = sender;
     self.last_receiver = receiver;
     self.last_message = message;

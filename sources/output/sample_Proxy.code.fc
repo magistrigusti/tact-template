@@ -25,6 +25,12 @@
     return (($self'owner, $self'count, $self'last_message, $self'last_sender, $self'last_receiver), ());
 }
 
+((slice, int, slice, slice, slice), ()) $Proxy$_fun_requireOwner((slice, int, slice, slice, slice) $self) impure inline_ref {
+    var (($self'owner, $self'count, $self'last_message, $self'last_sender, $self'last_receiver)) = $self;
+    throw_unless(132, ( __tact_slice_eq_bits($self'owner, __tact_context_get_sender()) ));
+    return (($self'owner, $self'count, $self'last_message, $self'last_sender, $self'last_receiver), ());
+}
+
 ((slice, int, slice, slice, slice), slice) $Proxy$_fun_owner((slice, int, slice, slice, slice) $self) impure inline_ref {
     var (($self'owner, $self'count, $self'last_message, $self'last_sender, $self'last_receiver)) = $self;
     return (($self'owner, $self'count, $self'last_message, $self'last_sender, $self'last_receiver), $self'owner);
@@ -34,11 +40,45 @@
 ;; Receivers of a Contract Proxy
 ;;
 
+((slice, int, slice, slice, slice), ()) $Proxy$_internal_text_561db9191cda1922faf6066ed24edc68166b3930bfeb59ba7fc844712e788f75((slice, int, slice, slice, slice) $self) impure inline {
+    var ($self'owner, $self'count, $self'last_message, $self'last_sender, $self'last_receiver) = $self;
+    ($self'owner, $self'count, $self'last_message, $self'last_sender, $self'last_receiver)~$Proxy$_fun_requireOwner();
+    $global_send($SendParameters$_constructor_to_value_mode_body(__tact_not_null($self'last_receiver), 0, 64, $String$_fun_asComment(__tact_not_null($self'last_message))));
+    $self'count = ($self'count + 1);
+    return (($self'owner, $self'count, $self'last_message, $self'last_sender, $self'last_receiver), ());
+}
+
+((slice, int, slice, slice, slice), ()) $Proxy$_internal_text_6ef41a1603279cbd03396d3a3593d3f465c968554125a8b39067ebfc8b060d65((slice, int, slice, slice, slice) $self) impure inline {
+    var ($self'owner, $self'count, $self'last_message, $self'last_sender, $self'last_receiver) = $self;
+    var ($ctx'bounced, $ctx'sender, $ctx'value, $ctx'raw) = __tact_context_get();
+    throw_unless(4429, ( __tact_slice_eq_bits($self'owner, $ctx'sender) ));
+    $global_send($SendParameters$_constructor_to_value_mode_body(__tact_not_null($self'last_receiver), 0, 64, $String$_fun_asComment(__tact_not_null($self'last_message))));
+    $self'count = ($self'count + 1);
+    return (($self'owner, $self'count, $self'last_message, $self'last_sender, $self'last_receiver), ());
+}
+
 ((slice, int, slice, slice, slice), ()) $Proxy$_internal_any_text((slice, int, slice, slice, slice) $self, slice $str) impure inline {
     var ($self'owner, $self'count, $self'last_message, $self'last_sender, $self'last_receiver) = $self;
     $global_send($SendParameters$_constructor_to_value_mode_body($self'owner, 0, 64, $String$_fun_asComment($str)));
     var ($ctx'bounced, $ctx'sender, $ctx'value, $ctx'raw) = __tact_context_get();
     ($self'owner, $self'count, $self'last_message, $self'last_sender, $self'last_receiver)~$Proxy$_fun_storeStats($ctx'sender, $self'owner, $str);
+    return (($self'owner, $self'count, $self'last_message, $self'last_sender, $self'last_receiver), ());
+}
+
+(((slice, int, slice, slice, slice)), ()) $Proxy$_internal_binary_ProxyMessage((slice, int, slice, slice, slice) $self, (slice, slice) $msg) impure inline {
+    var ($self'owner, $self'count, $self'last_message, $self'last_sender, $self'last_receiver) = $self;
+    var ($msg'str, $msg'to) = $msg;
+    $global_send($SendParameters$_constructor_to_value_mode_body($msg'to, 0, 64, $String$_fun_asComment($msg'str)));
+    var ($ctx'bounced, $ctx'sender, $ctx'value, $ctx'raw) = __tact_context_get();
+    ($self'owner, $self'count, $self'last_message, $self'last_sender, $self'last_receiver)~$Proxy$_fun_storeStats($ctx'sender, $msg'to, $msg'str);
+    return (($self'owner, $self'count, $self'last_message, $self'last_sender, $self'last_receiver), ());
+}
+
+(((slice, int, slice, slice, slice)), ()) $Proxy$_internal_binary_ChangeExampleOwner((slice, int, slice, slice, slice) $self, (slice) $msg) impure inline {
+    var ($self'owner, $self'count, $self'last_message, $self'last_sender, $self'last_receiver) = $self;
+    var ($msg'address) = $msg;
+    ($self'owner, $self'count, $self'last_message, $self'last_sender, $self'last_receiver)~$Proxy$_fun_requireOwner();
+    $self'owner = $msg'address;
     return (($self'owner, $self'count, $self'last_message, $self'last_sender, $self'last_receiver), ());
 }
 
@@ -63,7 +103,7 @@ _ supported_interfaces() method_id {
 }
 
 _ get_abi_ipfs() method_id {
-    return "ipfs://QmdZe5b5sPJPPmJpk9EpwnUqtuxsCNdUnYrDRmgknwvVZp";
+    return "ipfs://QmNtZWiz8Kya5YHLDigkdYyEpyhcJqiAgbMsCDZAC6q7VU";
 }
 
 _ lazy_deployment_completed() method_id {
@@ -87,8 +127,35 @@ _ lazy_deployment_completed() method_id {
     }
     
     
+    ;; Receive ProxyMessage message
+    if (op == 2376135367) {
+        var msg = in_msg~$ProxyMessage$_load();
+        self~$Proxy$_internal_binary_ProxyMessage(msg);
+        return (self, true);
+    }
+    
+    ;; Receive ChangeExampleOwner message
+    if (op == 4284418577) {
+        var msg = in_msg~$ChangeExampleOwner$_load();
+        self~$Proxy$_internal_binary_ChangeExampleOwner(msg);
+        return (self, true);
+    }
+    
     ;; Text Receivers
     if (op == 0) {
+        var text_op = slice_hash(in_msg);
+        
+        ;; Receive "Repeat" message
+        if (text_op == 0x561db9191cda1922faf6066ed24edc68166b3930bfeb59ba7fc844712e788f75) {
+            self~$Proxy$_internal_text_561db9191cda1922faf6066ed24edc68166b3930bfeb59ba7fc844712e788f75();
+            return (self, true);
+        }
+        
+        ;; Receive "Return" message
+        if (text_op == 0x6ef41a1603279cbd03396d3a3593d3f465c968554125a8b39067ebfc8b060d65) {
+            self~$Proxy$_internal_text_6ef41a1603279cbd03396d3a3593d3f465c968554125a8b39067ebfc8b060d65();
+            return (self, true);
+        }
         if (slice_bits(in_msg) >= 32) {
             self~$Proxy$_internal_any_text(in_msg.skip_bits(32));
             return (self, true);
