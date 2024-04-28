@@ -9,6 +9,31 @@ message ChangeExampleOwner {
   address: Address;
 }
 
+struct LastMessage {
+  last_message: String?;
+  last_sender: Address?;
+  last_receiver: Address?;
+}
+
+trait Stats {
+  count: Int;
+  last_message: String?;
+  last_sender: Address?;
+  last_receiver: Address?;
+
+  get fun get_count(): Int {
+    self.count;
+  }
+
+  get fun get_last(): LastMessage {
+    return LastMessage {
+      last_message: self.last_message,
+      last_sender: self.last_sender,
+      last_receiver: self.last_receiver
+    };
+  }
+}
+
 contract Proxy with Ownable {
   owner: Address;
   count: Int = 0;
@@ -19,6 +44,8 @@ contract Proxy with Ownable {
   init (owner: Address) {
     self.owner = owner;
   }
+
+
 
   receive("Repeat") {
     self.requireOwner();

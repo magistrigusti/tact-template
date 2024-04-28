@@ -9,6 +9,31 @@ message ChangeExampleOwner {
   address: Address;
 }
 
+struct LastMessage {
+  last_message: String?;
+  last_sender: Address?;
+  last_receiver: Address?;
+}
+
+trait Stats {
+  count: Int;
+  last_message: String?;
+  last_sender: Address?;
+  last_receiver: Address?;
+
+  get fun get_count(): Int {
+    self.count;
+  }
+
+  get fun get_last(): LastMessage {
+    return LastMessage {
+      last_message: self.last_message,
+      last_sender: self.last_sender,
+      last_receiver: self.last_receiver
+    };
+  }
+}
+
 contract Proxy with Ownable {
   owner: Address;
   count: Int = 0;
@@ -22,11 +47,11 @@ contract Proxy with Ownable {
 
   receive("Repeat") {
     self.requireOwner();
-    send(sendParameters{
-      to: self.last_reseiver!!,
+    send(SendParameters{
+      to: self.last_receiver!!,
       value: 0,
-      mode:SendRemainingValue,
-      body: (self.last_message!!).asComment()
+      mode: SendRemainingValue,
+      body:(self.last_message!!).asComment()
     });
 
     self.count = self.count + 1;
@@ -35,7 +60,7 @@ contract Proxy with Ownable {
   receive("Return") {
     let ctx: Context = context();
     require(ctx.sender == self.owner, "Invalid sender");
-    send(SendParamets{
+    send(SendParameters{
       to: self.last_receiver!!,
       value: 0,
       mode: SendRemainingValue,
@@ -65,8 +90,8 @@ contract Proxy with Ownable {
       body: msg.str.asComment()
     });
 
-    let ctx:Context = context();
-    self.storeStats(stx.sender, msg.to, msg.str);
+    let ctx: Context = context();
+    self.storeStats(ctx.sender, msg.to, msg.str);
   }
 
   receive(msg: ChangeExampleOwner) {

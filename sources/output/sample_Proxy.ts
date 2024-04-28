@@ -373,6 +373,56 @@ function dictValueParserChangeExampleOwner(): DictionaryValue<ChangeExampleOwner
     }
 }
 
+export type LastMessage = {
+    $$type: 'LastMessage';
+    last_message: string | null;
+    last_sender: Address | null;
+    last_receiver: Address | null;
+}
+
+export function storeLastMessage(src: LastMessage) {
+    return (builder: Builder) => {
+        let b_0 = builder;
+        if (src.last_message !== null && src.last_message !== undefined) { b_0.storeBit(true).storeStringRefTail(src.last_message); } else { b_0.storeBit(false); }
+        b_0.storeAddress(src.last_sender);
+        b_0.storeAddress(src.last_receiver);
+    };
+}
+
+export function loadLastMessage(slice: Slice) {
+    let sc_0 = slice;
+    let _last_message = sc_0.loadBit() ? sc_0.loadStringRefTail() : null;
+    let _last_sender = sc_0.loadMaybeAddress();
+    let _last_receiver = sc_0.loadMaybeAddress();
+    return { $$type: 'LastMessage' as const, last_message: _last_message, last_sender: _last_sender, last_receiver: _last_receiver };
+}
+
+function loadTupleLastMessage(source: TupleReader) {
+    let _last_message = source.readStringOpt();
+    let _last_sender = source.readAddressOpt();
+    let _last_receiver = source.readAddressOpt();
+    return { $$type: 'LastMessage' as const, last_message: _last_message, last_sender: _last_sender, last_receiver: _last_receiver };
+}
+
+function storeTupleLastMessage(source: LastMessage) {
+    let builder = new TupleBuilder();
+    builder.writeString(source.last_message);
+    builder.writeAddress(source.last_sender);
+    builder.writeAddress(source.last_receiver);
+    return builder.build();
+}
+
+function dictValueParserLastMessage(): DictionaryValue<LastMessage> {
+    return {
+        serialize: (src, buidler) => {
+            buidler.storeRef(beginCell().store(storeLastMessage(src)).endCell());
+        },
+        parse: (src) => {
+            return loadLastMessage(src.loadRef().beginParse());
+        }
+    }
+}
+
  type Proxy_init_args = {
     $$type: 'Proxy_init_args';
     owner: Address;
@@ -386,8 +436,8 @@ function initProxy_init_args(src: Proxy_init_args) {
 }
 
 async function Proxy_init(owner: Address) {
-    const __code = Cell.fromBase64('te6ccgECHAEABYkAART/APSkE/S88sgLAQIBYgIDA5rQAdDTAwFxsKMB+kABINdJgQELuvLgiCDXCwoggQT/uvLQiYMJuvLgiFRQUwNvBPhhAvhi2zxVFNs88uCCyPhDAcx/AcoAVUDbPMntVBMEBQIBIBESBPLtou37AZIwf+BwIddJwh+VMCDXCx/eIIIQjaDyx7qP0DDTHwGCEI2g8se68uCB1AHQAfpAASDXSYEBC7ry4Igg1wsKIIEE/7ry0ImDCbry4IgSbBJwgEAj2zwjVSB/VTBtbds8+EFvJBAjXwMC2zx/4CCCEP9fChG6CwwNBgHOUFQg10mBAQu68uCIINcLCiCBBP+68tCJgwm68uCIzxYSgQEBzwAhbrObfwHKAMhYzxbJAcyUcDLKAOJYIG6VMHABywGOHiDXSYEBC7ry4Igg1wsKIIEE/7ry0ImDCbry4IjPFuLIWBACfo61MNMfAYIQ/18KEbry4IH6QAEg10mBAQu68uCIINcLCiCBBP+68tCJgwm68uCIMVVA2zxsFH/gwACRMOMNcAgHBNwg+QEggvBWHbkZHNoZIvr2Bm7STtxoFms5ML/rWbp/yERxLniPdbqPoVvbPCAgbvLQgHCAQCUgbvLQgNs8f1UwbW3bPAOkA3/bMeCC8G70GhYDJ5y9AzltOjWT0/RlyWhVQSWos5Bn6/yLBg1luggLDAkAEvhCUlDHBfLghAN2jzAw+EFvJBAjXwMlgRFNAscF8vQgIG7y0IBwgEAlIG7y0IDbPH9VMG1t2zwDpAN/2zHgINdJwh/jAjALDAoDRoAg1yFwgEAi2zwoVSB/VTBtbds8+EFvJBAjXwNSYts8f9sxCwwNAULIcAHLH28AAW+MbW+MAds8byIByZMhbrOWAW8iWczJ6DEOAcrIcQHKAVAHAcoAcAHKAlAFINdJgQELuvLgiCDXCwoggQT/uvLQiYMJuvLgiM8WUAP6AnABymgjbrORf5MkbrPilzMzAXABygDjDSFus5x/AcoAASBu8tCAAcyVMXABygDiyQH7AA8ADGwzA6RVIAC6INdKIddJlyDCACLCALGOSgNvIoB/Is8xqwKhBasCUVW2CCDCAJwgqgIV1xhQM88WQBTeWW8CU0GhwgCZyAFvAlBEoaoCjhIxM8IAmdQw0CDXSiHXSZJwIOLi6F8DAJh/AcoAyHABygBwAcoAJG6znX8BygAEIG7y0IBQBMyWNANwAcoA4iRus51/AcoABCBu8tCAUATMljQDcAHKAOJwAcoAAn8BygACyVjMAFggbpUwcAHLAY4eINdJgQELuvLgiCDXCwoggQT/uvLQiYMJuvLgiM8W4skBzAIRviju2ebZ42KMExQCASAYGQJ+7UTQ1AH4Y9IAAY6E2zxsFeD4KNcLCoMJuvLgifpAASDXSYEBC7ry4Igg1wsKIIEE/7ry0ImDCbry4IgB0ds8FRYAAiQBvvpAASDXSYEBC7ry4Igg1wsKIIEE/7ry0ImDCbry4IgBgQEB1wDSAAGT1AHQkW3iAfpAIdcLAcMAjh0BINdJgQELuvLgiCDXCwoggQT/uvLQiYMJuvLgiJIxbeIB1AHQFwAIcG1tbQBg+kAh1wsBwwCOHQEg10mBAQu68uCIINcLCiCBBP+68tCJgwm68uCIkjFt4jEVFEMwALm7vRgnBc7D1dLK57HoTsOdZKhRtmgnCd1jUtK2R8syLTry398WI5gnAgVcAbgGdjlM5YOq5HJbLDgnCdl05as07LczoOlm2UZuikgnBAznVp5xX50lCwHWFuJkeygCAUgaGwARsK+7UTQ0gABgAHWybuNDVpcGZzOi8vUW1OdFpXaXo4S3lhNVlITERpZ2tkWXlFcHloY0pxaUFnYk1zQ0RaQUM2cTdWVYIA==');
-    const __system = Cell.fromBase64('te6cckECHgEABZMAAQHAAQEFoMZ3AgEU/wD0pBP0vPLICwMCAWIMBAIBIAoFAgEgCQYCAUgIBwB1sm7jQ1aXBmczovL1FtTnRaV2l6OEt5YTVZSExEaWdrZFl5RXB5aGNKcWlBZ2JNc0NEWkFDNnE3VlWCAAEbCvu1E0NIAAYAC5u70YJwXOw9XSyuex6E7DnWSoUbZoJwndY1LStkfLMi068t/fFiOYJwIFXAG4BnY5TOWDquRyWyw4JwnZdOWrNOy3M6DpZtlGbopIJwQM51aecV+dJQsB1hbiZHsoAhG+KO7Z5tnjYowaCwACJAOa0AHQ0wMBcbCjAfpAASDXSYEBC7ry4Igg1wsKIIEE/7ry0ImDCbry4IhUUFMDbwT4YQL4Yts8VRTbPPLggsj4QwHMfwHKAFVA2zzJ7VQaDw0BzlBUINdJgQELuvLgiCDXCwoggQT/uvLQiYMJuvLgiM8WEoEBAc8AIW6zm38BygDIWM8WyQHMlHAyygDiWCBulTBwAcsBjh4g10mBAQu68uCIINcLCiCBBP+68tCJgwm68uCIzxbiyFgOAFggbpUwcAHLAY4eINdJgQELuvLgiCDXCwoggQT/uvLQiYMJuvLgiM8W4skBzATy7aLt+wGSMH/gcCHXScIflTAg1wsf3iCCEI2g8se6j9Aw0x8BghCNoPLHuvLggdQB0AH6QAEg10mBAQu68uCIINcLCiCBBP+68tCJgwm68uCIEmwScIBAI9s8I1Ugf1UwbW3bPPhBbyQQI18DAts8f+AgghD/XwoRuhgWFRACfo61MNMfAYIQ/18KEbry4IH6QAEg10mBAQu68uCIINcLCiCBBP+68tCJgwm68uCIMVVA2zxsFH/gwACRMOMNcBQRBNwg+QEggvBWHbkZHNoZIvr2Bm7STtxoFms5ML/rWbp/yERxLniPdbqPoVvbPCAgbvLQgHCAQCUgbvLQgNs8f1UwbW3bPAOkA3/bMeCC8G70GhYDJ5y9AzltOjWT0/RlyWhVQSWos5Bn6/yLBg1luhQYFhIDdo8wMPhBbyQQI18DJYERTQLHBfL0ICBu8tCAcIBAJSBu8tCA2zx/VTBtbds8A6QDf9sx4CDXScIf4wIwGBYTA0aAINchcIBAIts8KFUgf1UwbW3bPPhBbyQQI18DUmLbPH/bMRgWFQAS+EJSUMcF8uCEAAxsMwOkVSAByshxAcoBUAcBygBwAcoCUAUg10mBAQu68uCIINcLCiCBBP+68tCJgwm68uCIzxZQA/oCcAHKaCNus5F/kyRus+KXMzMBcAHKAOMNIW6znH8BygABIG7y0IABzJUxcAHKAOLJAfsAFwCYfwHKAMhwAcoAcAHKACRus51/AcoABCBu8tCAUATMljQDcAHKAOIkbrOdfwHKAAQgbvLQgFAEzJY0A3ABygDicAHKAAJ/AcoAAslYzAFCyHAByx9vAAFvjG1vjAHbPG8iAcmTIW6zlgFvIlnMyegxGQC6INdKIddJlyDCACLCALGOSgNvIoB/Is8xqwKhBasCUVW2CCDCAJwgqgIV1xhQM88WQBTeWW8CU0GhwgCZyAFvAlBEoaoCjhIxM8IAmdQw0CDXSiHXSZJwIOLi6F8DAn7tRNDUAfhj0gABjoTbPGwV4Pgo1wsKgwm68uCJ+kABINdJgQELuvLgiCDXCwoggQT/uvLQiYMJuvLgiAHR2zwcGwAIcG1tbQG++kABINdJgQELuvLgiCDXCwoggQT/uvLQiYMJuvLgiAGBAQHXANIAAZPUAdCRbeIB+kAh1wsBwwCOHQEg10mBAQu68uCIINcLCiCBBP+68tCJgwm68uCIkjFt4gHUAdAdAGD6QCHXCwHDAI4dASDXSYEBC7ry4Igg1wsKIIEE/7ry0ImDCbry4IiSMW3iMRUUQzDAAxAu');
+    const __code = Cell.fromBase64('te6ccgECHAEABYkAART/APSkE/S88sgLAQIBYgIDA5rQAdDTAwFxsKMB+kABINdJgQELuvLgiCDXCwoggQT/uvLQiYMJuvLgiFRQUwNvBPhhAvhi2zxVFNs88uCCyPhDAcx/AcoAVUDbPMntVBMEBQIBIBESBPLtou37AZIwf+BwIddJwh+VMCDXCx/eIIIQjaDyx7qP0DDTHwGCEI2g8se68uCB1AHQAfpAASDXSYEBC7ry4Igg1wsKIIEE/7ry0ImDCbry4IgSbBJwgEAj2zwjVSB/VTBtbds8+EFvJBAjXwMC2zx/4CCCEP9fChG6CwwNBgHOUFQg10mBAQu68uCIINcLCiCBBP+68tCJgwm68uCIzxYSgQEBzwAhbrObfwHKAMhYzxbJAcyUcDLKAOJYIG6VMHABywGOHiDXSYEBC7ry4Igg1wsKIIEE/7ry0ImDCbry4IjPFuLIWBACfo61MNMfAYIQ/18KEbry4IH6QAEg10mBAQu68uCIINcLCiCBBP+68tCJgwm68uCIMVVA2zxsFH/gwACRMOMNcAgHBNwg+QEggvBWHbkZHNoZIvr2Bm7STtxoFms5ML/rWbp/yERxLniPdbqPoVvbPCAgbvLQgHCAQCUgbvLQgNs8f1UwbW3bPAOkA3/bMeCC8G70GhYDJ5y9AzltOjWT0/RlyWhVQSWos5Bn6/yLBg1luggLDAkAEvhCUlDHBfLghAN2jzAw+EFvJBAjXwMlgRFNAscF8vQgIG7y0IBwgEAlIG7y0IDbPH9VMG1t2zwDpAN/2zHgINdJwh/jAjALDAoDRoAg1yFwgEAi2zwoVSB/VTBtbds8+EFvJBAjXwNSYts8f9sxCwwNAULIcAHLH28AAW+MbW+MAds8byIByZMhbrOWAW8iWczJ6DEOAcrIcQHKAVAHAcoAcAHKAlAFINdJgQELuvLgiCDXCwoggQT/uvLQiYMJuvLgiM8WUAP6AnABymgjbrORf5MkbrPilzMzAXABygDjDSFus5x/AcoAASBu8tCAAcyVMXABygDiyQH7AA8ADGwzA6RVIAC6INdKIddJlyDCACLCALGOSgNvIoB/Is8xqwKhBasCUVW2CCDCAJwgqgIV1xhQM88WQBTeWW8CU0GhwgCZyAFvAlBEoaoCjhIxM8IAmdQw0CDXSiHXSZJwIOLi6F8DAJh/AcoAyHABygBwAcoAJG6znX8BygAEIG7y0IBQBMyWNANwAcoA4iRus51/AcoABCBu8tCAUATMljQDcAHKAOJwAcoAAn8BygACyVjMAFggbpUwcAHLAY4eINdJgQELuvLgiCDXCwoggQT/uvLQiYMJuvLgiM8W4skBzAIRviju2ebZ42KMExQCASAYGQJ+7UTQ1AH4Y9IAAY6E2zxsFeD4KNcLCoMJuvLgifpAASDXSYEBC7ry4Igg1wsKIIEE/7ry0ImDCbry4IgB0ds8FRYAAiQBvvpAASDXSYEBC7ry4Igg1wsKIIEE/7ry0ImDCbry4IgBgQEB1wDSAAGT1AHQkW3iAfpAIdcLAcMAjh0BINdJgQELuvLgiCDXCwoggQT/uvLQiYMJuvLgiJIxbeIB1AHQFwAIcG1tbQBg+kAh1wsBwwCOHQEg10mBAQu68uCIINcLCiCBBP+68tCJgwm68uCIkjFt4jEVFEMwALm7vRgnBc7D1dLK57HoTsOdZKhRtmgnCd1jUtK2R8syLTry398WI5gnAgVcAbgGdjlM5YOq5HJbLDgnCdl05as07LczoOlm2UZuikgnBAznVp5xX50lCwHWFuJkeygCAUgaGwARsK+7UTQ0gABgAHWybuNDVpcGZzOi8vUW1QY3lwUXg1b3JYUWpBdEFOZ1FWbThlejZBMXI3WVpjZWRqRnJ3cEZMeHJuNIIA==');
+    const __system = Cell.fromBase64('te6cckECHgEABZMAAQHAAQEFoMZ3AgEU/wD0pBP0vPLICwMCAWIMBAIBIAoFAgEgCQYCAUgIBwB1sm7jQ1aXBmczovL1FtUGN5cFF4NW9yWFFqQXRBTmdRVm04ZXo2QTFyN1laY2VkakZyd3BGTHhybjSCAAEbCvu1E0NIAAYAC5u70YJwXOw9XSyuex6E7DnWSoUbZoJwndY1LStkfLMi068t/fFiOYJwIFXAG4BnY5TOWDquRyWyw4JwnZdOWrNOy3M6DpZtlGbopIJwQM51aecV+dJQsB1hbiZHsoAhG+KO7Z5tnjYowaCwACJAOa0AHQ0wMBcbCjAfpAASDXSYEBC7ry4Igg1wsKIIEE/7ry0ImDCbry4IhUUFMDbwT4YQL4Yts8VRTbPPLggsj4QwHMfwHKAFVA2zzJ7VQaDw0BzlBUINdJgQELuvLgiCDXCwoggQT/uvLQiYMJuvLgiM8WEoEBAc8AIW6zm38BygDIWM8WyQHMlHAyygDiWCBulTBwAcsBjh4g10mBAQu68uCIINcLCiCBBP+68tCJgwm68uCIzxbiyFgOAFggbpUwcAHLAY4eINdJgQELuvLgiCDXCwoggQT/uvLQiYMJuvLgiM8W4skBzATy7aLt+wGSMH/gcCHXScIflTAg1wsf3iCCEI2g8se6j9Aw0x8BghCNoPLHuvLggdQB0AH6QAEg10mBAQu68uCIINcLCiCBBP+68tCJgwm68uCIEmwScIBAI9s8I1Ugf1UwbW3bPPhBbyQQI18DAts8f+AgghD/XwoRuhgWFRACfo61MNMfAYIQ/18KEbry4IH6QAEg10mBAQu68uCIINcLCiCBBP+68tCJgwm68uCIMVVA2zxsFH/gwACRMOMNcBQRBNwg+QEggvBWHbkZHNoZIvr2Bm7STtxoFms5ML/rWbp/yERxLniPdbqPoVvbPCAgbvLQgHCAQCUgbvLQgNs8f1UwbW3bPAOkA3/bMeCC8G70GhYDJ5y9AzltOjWT0/RlyWhVQSWos5Bn6/yLBg1luhQYFhIDdo8wMPhBbyQQI18DJYERTQLHBfL0ICBu8tCAcIBAJSBu8tCA2zx/VTBtbds8A6QDf9sx4CDXScIf4wIwGBYTA0aAINchcIBAIts8KFUgf1UwbW3bPPhBbyQQI18DUmLbPH/bMRgWFQAS+EJSUMcF8uCEAAxsMwOkVSAByshxAcoBUAcBygBwAcoCUAUg10mBAQu68uCIINcLCiCBBP+68tCJgwm68uCIzxZQA/oCcAHKaCNus5F/kyRus+KXMzMBcAHKAOMNIW6znH8BygABIG7y0IABzJUxcAHKAOLJAfsAFwCYfwHKAMhwAcoAcAHKACRus51/AcoABCBu8tCAUATMljQDcAHKAOIkbrOdfwHKAAQgbvLQgFAEzJY0A3ABygDicAHKAAJ/AcoAAslYzAFCyHAByx9vAAFvjG1vjAHbPG8iAcmTIW6zlgFvIlnMyegxGQC6INdKIddJlyDCACLCALGOSgNvIoB/Is8xqwKhBasCUVW2CCDCAJwgqgIV1xhQM88WQBTeWW8CU0GhwgCZyAFvAlBEoaoCjhIxM8IAmdQw0CDXSiHXSZJwIOLi6F8DAn7tRNDUAfhj0gABjoTbPGwV4Pgo1wsKgwm68uCJ+kABINdJgQELuvLgiCDXCwoggQT/uvLQiYMJuvLgiAHR2zwcGwAIcG1tbQG++kABINdJgQELuvLgiCDXCwoggQT/uvLQiYMJuvLgiAGBAQHXANIAAZPUAdCRbeIB+kAh1wsBwwCOHQEg10mBAQu68uCIINcLCiCBBP+68tCJgwm68uCIkjFt4gHUAdAdAGD6QCHXCwHDAI4dASDXSYEBC7ry4Igg1wsKIIEE/7ry0ImDCbry4IiSMW3iMRUUQzC5NQSw');
     let builder = beginCell();
     builder.storeRef(__system);
     builder.storeUint(0, 1);
@@ -432,6 +482,7 @@ const Proxy_types: ABIType[] = [
     {"name":"ChangeOwnerOk","header":846932810,"fields":[{"name":"queryId","type":{"kind":"simple","type":"uint","optional":false,"format":64}},{"name":"newOwner","type":{"kind":"simple","type":"address","optional":false}}]},
     {"name":"ProxyMessage","header":2376135367,"fields":[{"name":"str","type":{"kind":"simple","type":"string","optional":false}},{"name":"to","type":{"kind":"simple","type":"address","optional":false}}]},
     {"name":"ChangeExampleOwner","header":4284418577,"fields":[{"name":"address","type":{"kind":"simple","type":"address","optional":false}}]},
+    {"name":"LastMessage","header":null,"fields":[{"name":"last_message","type":{"kind":"simple","type":"string","optional":true}},{"name":"last_sender","type":{"kind":"simple","type":"address","optional":true}},{"name":"last_receiver","type":{"kind":"simple","type":"address","optional":true}}]},
 ]
 
 const Proxy_getters: ABIGetter[] = [

@@ -3,7 +3,7 @@ Contract: Proxy
 BOC Size: 1429 bytes
 
 # Types
-Total Types: 7
+Total Types: 8
 
 ## StateInit
 TLB: `_ code:^cell data:^cell = StateInit`
@@ -32,6 +32,10 @@ Signature: `ProxyMessage{str:^string,to:address}`
 ## ChangeExampleOwner
 TLB: `change_example_owner#ff5f0a11 address:address = ChangeExampleOwner`
 Signature: `ChangeExampleOwner{address:address}`
+
+## LastMessage
+TLB: `_ last_message:Maybe ^string last_sender:Maybe address last_receiver:Maybe address = LastMessage`
+Signature: `LastMessage{last_message:Maybe ^string,last_sender:Maybe address,last_receiver:Maybe address}`
 
 # Get Methods
 Total Get Methods: 1
