@@ -1,4 +1,5 @@
 import "@stdlib/ownable";
+import "@stdlib/deploy";
 
 message ProxyMessage {
   str: String;
@@ -34,7 +35,7 @@ trait Stats {
   }
 }
 
-contract Proxy with Ownable {
+contract Proxy with Ownable, Stats, Deployable {
   owner: Address;
   count: Int = 0;
   last_message: String? = null;
@@ -51,9 +52,8 @@ contract Proxy with Ownable {
       to: self.last_receiver!!,
       value: 0,
       mode: SendRemainingValue,
-      body:(self.last_message!!).asComment()
+      body: (self.last_message!!).asComment()
     });
-
     self.count = self.count + 1;
   }
 
@@ -66,7 +66,6 @@ contract Proxy with Ownable {
       mode: SendRemainingValue,
       body: (self.last_message!!).asComment()
     });
-
     self.count = self.count + 1;
   }
 

@@ -1,4 +1,5 @@
 import "@stdlib/ownable";
+import "@stdlib/deploy";
 
 message ProxyMessage {
   str: String;
@@ -34,7 +35,7 @@ trait Stats {
   }
 }
 
-contract Proxy with Ownable {
+contract Proxy with Ownable, Stats, Deployable {
   owner: Address;
   count: Int = 0;
   last_message: String? = null;
@@ -44,8 +45,6 @@ contract Proxy with Ownable {
   init (owner: Address) {
     self.owner = owner;
   }
-
-
 
   receive("Repeat") {
     self.requireOwner();
